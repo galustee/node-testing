@@ -59,6 +59,22 @@ const createPlace = (req, res, next) => {
     res.status(201).json({place: createdPlace})
 }
 
+const updatePlaceById = (req, res, next) => {
+    /* const placeId = req.params.pid
+    const place = DUMMY_PLACES.find(p => {
+        return p.id === placeId;
+    })*/
+
+
+}
+
+const deletePlaceById = (req, res, next) => {
+    
+}
+
+
 exports.getPlaceById = getPlaceById;
 exports.getPlaceByUserId = getPlaceByUserId
 exports.createPlace = createPlace
+exports.updatePlaceById = updatePlaceById
+exports.deletePlaceById = deletePlaceById
