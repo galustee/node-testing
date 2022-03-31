@@ -59,7 +59,7 @@ const createPlace = (req, res, next) => {
 
     res.status(201).json({place: createdPlace})
 }
-/// wow
+
 const updatePlaceById = (req, res, next) => {
     /* const placeId = req.params.pid
     const place = DUMMY_PLACES.find(p => {
