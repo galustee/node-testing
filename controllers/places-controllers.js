@@ -1,4 +1,5 @@
 const uuid = require('uuid').v4;
+const { validationResult } = require('express-validator')
 
 const HttpError = require('../models/http-error')
 
@@ -31,20 +32,27 @@ const getPlaceById = (req, res, next) => {
     res.json({place})
 }
 
-const getPlaceByUserId = (req, res, next) => {
+const getPlacesByUserId = (req, res, next) => {
     const userId = req.params.uid
-    const place = DUMMY_PLACES.find(p => {
+    const places = DUMMY_PLACES.filter(p => {
         return p.creator === userId
     })
-    if (!place) {
-        const error = new HttpError('Could not find a palce for the provided id.', 404)
+    if (!places || places.length === 0) {
+        const error = new HttpError('Could not find palces for the provided id.', 404)
         return next(error)
     }
 
-    res.json({place})
+    res.json({places})
 }
 
 const createPlace = (req, res, next) => {
+    const valErrors = validationResult(req)
+
+    if (!valErrors.isEmpty()) {
+        console.log(valErrors)
+        throw new HttpError('Invalid inputs', 422)
+    }
+
     const { title, description, location, address, creator} = req.body
     const createdPlace = {
         id: uuid(),
@@ -61,6 +69,13 @@ const createPlace = (req, res, next) => {
 }
 
 const updatePlaceById = (req, res, next) => {
+    const valErrors = validationResult(req)
+
+    if (!valErrors.isEmpty()) {
+        console.log(valErrors)
+        throw new HttpError('Invalid inputs', 422)
+    }
+
     const {title, description, location, address, creator} = req.body
     const placeId = req.params.pid
     const createdPlace = {
@@ -83,13 +98,16 @@ const updatePlaceById = (req, res, next) => {
 ///
 const deletePlaceById = (req, res, next) => {
     const placeId = req.params.pid
+    if (!DUMMY_PLACES.find(p => p.id === placeId)){
+        throw new HttpError('Could not find a place for that id', 404)
+    }
     DUMMY_PLACES = DUMMY_PLACES.filter(p => p.id !== placeId)
     res.status(200).json({message: 'deleted'})
 }
 
 
 exports.getPlaceById = getPlaceById;
-exports.getPlaceByUserId = getPlaceByUserId
+exports.getPlacesByUserId = getPlacesByUserId
 exports.createPlace = createPlace
 exports.updatePlaceById = updatePlaceById
 exports.deletePlaceById = deletePlaceById
