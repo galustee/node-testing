@@ -17,7 +17,7 @@ let DUMMY_PLACES = [
         creator: 'u1'
     }
 ]
-
+//
 
 const getPlaceById = (req, res, next) => {
     const placeId = req.params.pid
