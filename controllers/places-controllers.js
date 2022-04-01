@@ -80,7 +80,7 @@ const updatePlaceById = (req, res, next) => {
 
     res.status(200).json({place: createdPlace})
 }
-
+///
 const deletePlaceById = (req, res, next) => {
     const placeId = req.params.pid
     DUMMY_PLACES = DUMMY_PLACES.filter(p => p.id !== placeId)
